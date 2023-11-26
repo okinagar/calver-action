@@ -23,7 +23,7 @@ jobs:
         TZ: 'Asia/Tokyo'
       with:
         target_branch: 'main'
-        schema: 'YYYY.MM.DD.MICRO'
+        schema: 'YYYY.0M.0D.MICRO'
 ```
 ## Input
 ### Environment variables
@@ -36,7 +36,7 @@ jobs:
 |               | Required | Default          |
 |---------------|----------|------------------|
 | TARGET_BRANCH | :x:      | main             |
-| SCHEMA        | :x:      | YYYY.MM.DD.MICRO |
+| SCHEMA        | :x:      | YYYY.0M.0D.MICRO |
 
 ## Output
 version_number: The generated version number.
