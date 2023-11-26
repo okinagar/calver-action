@@ -14,7 +14,7 @@ if [ -n "$TZ" ]; then
 fi
 
 TARGET_BRANCH="$1"
-VERSION_SCHEMA="$2"
+SCHEMA="$2"
 
 git checkout "$TARGET_BRANCH"
 cd /github/workspace || exit 1
@@ -28,9 +28,9 @@ if [ -n "$TAGS" ]; then
     exit 1
 fi
 
-# Exit if VERSION_SCHEMA contains MICRO but does not end with MICRO
-if [[ $VERSION_SCHEMA == *MICRO* && $VERSION_SCHEMA != *MICRO ]]; then
-    echo "Error: VERSION_SCHEMA does not end with MICRO"
+# Exit if SCHEMA contains MICRO but does not end with MICRO
+if [[ $SCHEMA == *MICRO* && $SCHEMA != *MICRO ]]; then
+    echo "Error: SCHEMA does not end with MICRO"
     exit 1
 fi
 
@@ -40,7 +40,7 @@ echo "CURRENT: $(date)"
 CURRENT=$(date +'%Y %y %-y %m %-m %U %d %-d')
 IFS=' ' read -ra CURRENT_PARTS <<< "$CURRENT"
 
-NEW_VERSION_NUMBER="${VERSION_SCHEMA//YYYY/${CURRENT_PARTS[0]}}"
+NEW_VERSION_NUMBER="${SCHEMA//YYYY/${CURRENT_PARTS[0]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//YY/${CURRENT_PARTS[1]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//0Y/${CURRENT_PARTS[2]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//MM/${CURRENT_PARTS[3]}}"
@@ -49,7 +49,7 @@ NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//0W/${CURRENT_PARTS[5]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//DD/${CURRENT_PARTS[6]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//0D/${CURRENT_PARTS[7]}}"
 
-if [[ $VERSION_SCHEMA == *"MICRO" ]]; then
+if [[ $SCHEMA == *"MICRO" ]]; then
   NEW_VERSION_NUMBER_WITHOUT_MICRO=$(echo "$NEW_VERSION_NUMBER" | sed -E 's/.MICRO$//')
   echo "NEW_VERSION_NUMBER_WITHOUT_MICRO: $NEW_VERSION_NUMBER_WITHOUT_MICRO"
   LATEST_VERSION_NUMBER=$(echo "$LATEST_TAG" | sed -E 's/.[0-9]+$//')
