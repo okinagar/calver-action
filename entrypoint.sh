@@ -16,11 +16,11 @@ fi
 TARGET_BRANCH="$1"
 SCHEMA="$2"
 
-git checkout "$TARGET_BRANCH"
 cd /github/workspace || exit 1
 git config --global --add safe.directory /github/workspace
 
 # Exit if the latest commit is tagged
+git checkout "$TARGET_BRANCH"
 LATEST_COMMIT_HASH=$(git rev-parse HEAD)
 TAGS=$(git tag --contains "$LATEST_COMMIT_HASH")
 if [ -n "$TAGS" ]; then
@@ -50,9 +50,9 @@ NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//DD/${CURRENT_PARTS[6]}}"
 NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//0D/${CURRENT_PARTS[7]}}"
 
 if [[ $SCHEMA == *"MICRO" ]]; then
-  NEW_VERSION_NUMBER_WITHOUT_MICRO=$(echo "$NEW_VERSION_NUMBER" | sed -E 's/.MICRO$//')
+  NEW_VERSION_NUMBER_WITHOUT_MICRO=$(echo "$NEW_VERSION_NUMBER" | sed -E 's/\*MICRO$//')
   echo "NEW_VERSION_NUMBER_WITHOUT_MICRO: $NEW_VERSION_NUMBER_WITHOUT_MICRO"
-  LATEST_VERSION_NUMBER=$(echo "$LATEST_TAG" | sed -E 's/.[0-9]+$//')
+  LATEST_VERSION_NUMBER=$(echo "$LATEST_TAG" | sed -E 's/\*[0-9]+$//')
   echo "LATEST_VERSION_NUMBER: $LATEST_VERSION_NUMBER"
   if [[ $LATEST_TAG =~ ([0-9]+)$ ]]; then
     LATEST_VERSION_MICRO="${BASH_REMATCH[1]}"
