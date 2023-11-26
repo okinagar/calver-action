@@ -1,5 +1,5 @@
 name: 'Calver'
-description: 'generate tags and releases based on calver'
+description: 'generate version_number based on calver'
 author: 'Ryo Okinaga'
 
 inputs:
@@ -12,11 +12,11 @@ inputs:
     required: false
     default: 'YYYY.0M.0D.MICRO'
 outputs:
-  tag_name:
-    description: 'calver'
+  version_number:
+    description: 'generated calendar version number.'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.target_branch }}
-    - ${{ inputs.version_schema }}
+    - ${{ inputs.schema }}
