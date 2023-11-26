@@ -13,10 +13,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Generate calver
+    - uses: actions/checkout@v4
+
+    - name: Generate version number
       uses: okinagar/calver-action@v0.1.0 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
