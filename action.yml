@@ -3,10 +3,6 @@ description: 'generate version_number based on calver'
 author: 'Ryo Okinaga'
 
 inputs:
-  target_branch:
-    description: 'target branch'
-    required: false
-    default: main
   schema:
     description: 'calver schema'
     required: false
@@ -18,5 +14,4 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.target_branch }}
     - ${{ inputs.schema }}

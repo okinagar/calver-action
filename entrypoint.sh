@@ -13,12 +13,10 @@ if [ -n "$TZ" ]; then
   cp /usr/share/zoneinfo/"${TZ}" /etc/localtime
 fi
 
-TARGET_BRANCH="$1"
-SCHEMA="$2"
+SCHEMA="$1"
 
 cd /github/workspace || exit 1
 git config --global --add safe.directory /github/workspace
-git checkout "$TARGET_BRANCH"
 
 # Exit if SCHEMA contains MICRO but does not end with MICRO
 if [[ $SCHEMA == *MICRO* && $SCHEMA != *MICRO ]]; then

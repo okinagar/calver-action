@@ -23,7 +23,6 @@ jobs:
     - name: Generate version number
       uses: okinagar/calver-action@v0.1.0 
       with:
-        target_branch: 'main'
         schema: 'YYYY.0M.0D.MICRO'
 ```
 ## Input
@@ -36,7 +35,6 @@ jobs:
 ### Arguments
 |               | Required | Default          |
 |---------------|----------|------------------|
-| TARGET_BRANCH | :x:      | main             |
 | SCHEMA        | :x:      | YYYY.0M.0D.MICRO |
 
 ## Output
