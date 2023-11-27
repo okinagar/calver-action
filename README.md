@@ -12,14 +12,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TZ: 'Asia/Tokyo'
     steps:
     - uses: actions/checkout@v4
 
     - name: Generate version number
       uses: okinagar/calver-action@v0.1.0 
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TZ: 'Asia/Tokyo'
       with:
         target_branch: 'main'
         schema: 'YYYY.0M.0D.MICRO'
