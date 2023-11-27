@@ -18,15 +18,7 @@ SCHEMA="$2"
 
 cd /github/workspace || exit 1
 git config --global --add safe.directory /github/workspace
-
-# Exit if the latest commit is tagged
 git checkout "$TARGET_BRANCH"
-LATEST_COMMIT_HASH=$(git rev-parse HEAD)
-TAGS=$(git tag --contains "$LATEST_COMMIT_HASH")
-if [ -n "$TAGS" ]; then
-    echo "The latest commit is tagged"
-    exit 1
-fi
 
 # Exit if SCHEMA contains MICRO but does not end with MICRO
 if [[ $SCHEMA == *MICRO* && $SCHEMA != *MICRO ]]; then
