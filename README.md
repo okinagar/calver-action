@@ -17,6 +17,8 @@ jobs:
       TZ: 'Asia/Tokyo'
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Generate version number
       uses: okinagar/calver-action@v0.1.0 
