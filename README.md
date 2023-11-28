@@ -10,20 +10,31 @@ on:
     branches:
       - main
 jobs:
-  build:
+  versioning:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TZ: 'Asia/Tokyo'
+
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Generate version number
-      uses: okinagar/calver-action@v0.1.0 
+      uses: okinagar/calver-action@v0.1.0
+      id: calver
       with:
         schema: 'YYYY.0M.0D.MICRO'
+    
+    - name: Create Tag
+      run: |
+        tag_name="${{ steps.calver.outputs.version_number }}"
+        git tag "$tag_name"
+        git push origin "$tag_name"
+    
+    - name: Create Release
+      run: gh release create ${{ steps.calver.outputs.version_number }} --generate-notes --target main
 ```
 ## Input
 ### Environment variables
