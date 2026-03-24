@@ -22,19 +22,20 @@ jobs:
         fetch-depth: 0
 
     - name: Generate version number
-      uses: okinagar/calver-action@v0.1.0
+      uses: okinagar/calver-action@v0.2.0
       id: calver
       with:
         schema: 'YYYY.0M.0D.MICRO'
-    
+        prefix: 'backend/'
+
     - name: Create Tag
       run: |
-        tag_name="${{ steps.calver.outputs.version_number }}"
+        tag_name="backend/${{ steps.calver.outputs.version_number }}"
         git tag "$tag_name"
         git push origin "$tag_name"
-    
+
     - name: Create Release
-      run: gh release create ${{ steps.calver.outputs.version_number }} --generate-notes --target main
+      run: gh release create "backend/${{ steps.calver.outputs.version_number }}" --generate-notes --target main
 ```
 ## Input
 ### Environment variables
@@ -44,9 +45,10 @@ jobs:
 | TZ           | :x:                 | UTC     |
 
 ### Arguments
-|               | Required | Default          |
-|---------------|----------|------------------|
-| SCHEMA        | :x:      | YYYY.0M.0D.MICRO |
+|               | Required | Default          | Description |
+|---------------|----------|------------------|-------------|
+| SCHEMA        | :x:      | YYYY.0M.0D.MICRO | CalVer schema |
+| PREFIX        | :x:      |                  | Tag prefix to filter existing tags (e.g. `backend/`). When set, only tags matching this prefix are used for MICRO increment. |
 
 ## Output
 version_number: The generated version number.
