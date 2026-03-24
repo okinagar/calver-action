@@ -7,6 +7,10 @@ inputs:
     description: 'calver schema'
     required: false
     default: 'YYYY.0M.0D.MICRO'
+  prefix:
+    description: 'tag prefix to filter existing tags (e.g. "backend/")'
+    required: false
+    default: ''
 outputs:
   version_number:
     description: 'generated calendar version number.'
@@ -15,3 +19,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.schema }}
+    - ${{ inputs.prefix }}

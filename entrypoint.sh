@@ -14,6 +14,7 @@ if [ -n "$TZ" ]; then
 fi
 
 SCHEMA="$1"
+PREFIX="$2"
 
 cd /github/workspace || exit 1
 git config --global --add safe.directory /github/workspace
@@ -24,7 +25,13 @@ if [[ $SCHEMA == *MICRO* && $SCHEMA != *MICRO ]]; then
     exit 1
 fi
 
-LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
+# プレフィックスが指定されている場合、そのプレフィックスに一致するタグのみを検索
+if [ -n "$PREFIX" ]; then
+  echo "PREFIX: $PREFIX"
+  LATEST_TAG=$(git tag -l "${PREFIX}*" --sort=-v:refname | head -1)
+else
+  LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
+fi
 echo "LATEST_TAG: $LATEST_TAG"
 echo "CURRENT: $(date)"
 CURRENT=$(date +'%Y %y %-y %m %-m %U %d %-d')
@@ -42,9 +49,11 @@ NEW_VERSION_NUMBER="${NEW_VERSION_NUMBER//0D/${CURRENT_PARTS[7]}}"
 if [[ $SCHEMA == *"MICRO" ]]; then
   NEW_VERSION_NUMBER_WITHOUT_MICRO=$(echo "$NEW_VERSION_NUMBER" | sed -E 's/.MICRO$//')
   echo "NEW_VERSION_NUMBER_WITHOUT_MICRO: $NEW_VERSION_NUMBER_WITHOUT_MICRO"
-  LATEST_VERSION_NUMBER=$(echo "$LATEST_TAG" | sed -E 's/.[0-9]+$//')
+  # プレフィックスを除去してバージョン部分のみで比較
+  LATEST_TAG_WITHOUT_PREFIX="${LATEST_TAG#"$PREFIX"}"
+  LATEST_VERSION_NUMBER=$(echo "$LATEST_TAG_WITHOUT_PREFIX" | sed -E 's/.[0-9]+$//')
   echo "LATEST_VERSION_NUMBER: $LATEST_VERSION_NUMBER"
-  if [[ $LATEST_TAG =~ ([0-9]+)$ ]]; then
+  if [[ $LATEST_TAG_WITHOUT_PREFIX =~ ([0-9]+)$ ]]; then
     LATEST_VERSION_MICRO="${BASH_REMATCH[1]}"
   else
     LATEST_VERSION_MICRO=0
